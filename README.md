@@ -1,2 +1,2 @@
-# Bad_USB_RP2040
-VSOSH Project
+# MicroReader_v1
+MR_OS

@@ -6,7 +6,8 @@ import os
 from time import sleep
 class System:
     def __init__(self,oled,path="/lib/DATA"):
-        self.debug_on=False
+        self.debug_on=True
+        
         os.chdir("/lib/DATA")
         self.window_type="listbox"
         self.file_system=MR_OS_API.file_system()
@@ -25,7 +26,9 @@ class System:
         
         
         self.Bt3.assignLongPressStart(lambda: self.b_handler("escape"))
-   
+        
+        self.debug(f"Dir:{os.getcwd()}")
+        self.debug("System inited!")
         
         self.stack=[]
         self.run()
@@ -41,8 +44,10 @@ class System:
             self.main_interface.down()
         elif com == "up":
             self.main_interface.up()
-        elif com == "select" and self.main_interface.type!="text":
+        elif com == "select" and self.main_interface.type != "text":
             self.select()
+        elif com == "select" and self.main_interface.type == "bad_usb":
+            self.main_interface.select()
         elif com == "escape":
             self.escape()
 
@@ -58,8 +63,8 @@ class System:
             if typefile:
                 self.window_type=typefile
                 self.window_set_and_view(os.getcwd()+"/"+element,element)
+                
         except Exception as e:
-            print(e)
             os.chdir(element)
             self.path=os.getcwd()
             self.stack.append(self.main_interface)

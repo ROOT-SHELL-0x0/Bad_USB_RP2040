@@ -1,5 +1,6 @@
 import os
 from time import sleep
+from badusb.command import Command
 
 def stop():
     sleep(1000);
@@ -28,7 +29,7 @@ class listbox:
             if  inde==self.index_page:
                 self.page_payloads=lista
     
-    def get_dir(self,path="/lib/DATA"):
+    def get_dir(self,path="/lib/SCHPORA"):
         payloads=os.listdir(path)
         payloads=sorted(payloads)
         if len(payloads)==0:
@@ -149,12 +150,14 @@ class Bad_USB:
         self.data=''
         self.name=name
         
-        self.data+=f"File:{name}"+self.get_stub("f'File:{name}'")
+        self.data+=f"File:{name}\n"
         for data in self.data_raw:
             if data != "Тип выбранного файла:bad_usb" and data != "STOP_INFO":
-                self.data+=data+self.get_stub(data)
+                self.data+=data+"\n"
             if data == "STOP_INFO":
                 break
+        self.data=self.get_row(self.data)
+        #print(f" DATA: {self.data}")
         
 
             
@@ -172,14 +175,30 @@ class Bad_USB:
     def up(self):
         self.oled.scroll_text_vertical(direction="up")
         self.oled.show()
-    def get_stub(self,data):
-        a=15-len(data)
-        return " " * (a+15)
+        
+    def get_row(self,data):
+        clear_data=[]
+        for element in data.split("\n"):
+            clear_data.append(element)
+            
+        return clear_data    #Получаем массив со строками для удобного вывода
+    
+    def draw_row(self):
+        for element in self.data:
+            self.oled.text(element,1,self.oled.y)
+            self.oled.y+=12
+        
+
+    
     def draw(self):
         print(self.data)
         self.oled.clear()
-        self.oled.text(self.data,1,self.oled.y)
+        self.draw_row()
         self.oled.show()
+        
+        #print(os.getcwd())
+        sleep(1)
+        #Command().execute(self.name)
     
         
         

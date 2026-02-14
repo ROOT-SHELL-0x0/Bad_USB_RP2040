@@ -44,7 +44,7 @@ class System:
             self.main_interface.down()
         elif com == "up":
             self.main_interface.up()
-        elif com == "select" and self.main_interface.type != "text":
+        elif com == "select" and self.main_interface.type == "listbox":
             self.select()
         elif com == "select" and self.main_interface.type == "bad_usb":
             self.main_interface.select()
@@ -75,7 +75,7 @@ class System:
             
     
     def escape(self):
-        if self.main_interface.type=="text" or "bad_usb":
+        if self.main_interface.type == "text" or self.main_interface.type == "bad_usb":
             None
         else:
             if len(self.stack)>0:

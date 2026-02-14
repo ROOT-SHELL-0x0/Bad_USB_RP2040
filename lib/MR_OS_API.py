@@ -162,19 +162,18 @@ class Bad_USB:
             if data != "Тип выбранного файла:bad_usb" and data != "STOP_INFO":
                 self.data+=data+"\n"
             if data == "STOP_INFO":
+                self.data+="Press select to inject"
                 break
         self.data=self.get_row(self.data)
-
+    
+    def select(self):
+        self.oled.clear()
+        self.oled.text("Injecting...",10,25,"AA")
+        self.oled.show()
+        Command().execute(self.name)
+        self.draw()
         
 
-            
-    
-    
-    
-        
-        
-        
-    
     def down(self):
         self.oled.scroll_text_vertical(direction="down")
         self.draw_row()

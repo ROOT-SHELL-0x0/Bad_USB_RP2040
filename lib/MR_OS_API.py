@@ -164,7 +164,7 @@ class Bad_USB:
             if data == "STOP_INFO":
                 break
         self.data=self.get_row(self.data)
-        #print(f" DATA: {self.data}")
+
         
 
             
@@ -192,11 +192,10 @@ class Bad_USB:
         for element in data.split("\n"):
             clear_data.append(element)
             
-        return clear_data    #Получаем массив со строками для удобного вывода
+        return clear_data  
     
     def draw_row(self):
         start_pos=self.oled.scroll_y
-        print(f" Start: {id(start_pos)}")
         
         for element in self.data:
             self.oled.text(element,1,start_pos)

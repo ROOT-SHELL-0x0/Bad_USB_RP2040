@@ -129,13 +129,21 @@ class text:
     
     
     def down(self):
-        self.oled.scroll_text_vertical(direction="down")
-        self.oled.show()
-    def up(self):
-        self.oled.scroll_text_vertical(direction="up")
-        self.oled.show()
-    def draw(self):
+        self.oled.scroll_text_vertical(direction="down",data=self.data)
+        self.draw_row()
         
+    def up(self):
+        self.oled.scroll_text_vertical(direction="up",data=self.data)
+        self.draw_row()
+        
+    def draw_row(self):
+        y=self.oled.scroll_y
+        self.oled.text(self.data,1,y)
+        self.oled.show()
+        
+        
+        
+    def draw(self):
         self.oled.clear()
         self.oled.text(self.data,1,1)
         self.oled.show()
@@ -144,7 +152,6 @@ class text:
 class Bad_USB:
     def __init__(self,type_of_obj,oled,data,name):
         self.oled=oled
-        self.oled.y=1
         self.type=type_of_obj
         self.data_raw=data.split()
         self.data=''
@@ -170,11 +177,15 @@ class Bad_USB:
     
     def down(self):
         self.oled.scroll_text_vertical(direction="down")
+        self.draw_row()
         self.oled.show()
+        
         
     def up(self):
         self.oled.scroll_text_vertical(direction="up")
+        self.draw_row()
         self.oled.show()
+        
         
     def get_row(self,data):
         clear_data=[]
@@ -184,14 +195,17 @@ class Bad_USB:
         return clear_data    #Получаем массив со строками для удобного вывода
     
     def draw_row(self):
+        start_pos=self.oled.scroll_y
+        print(f" Start: {id(start_pos)}")
+        
         for element in self.data:
-            self.oled.text(element,1,self.oled.y)
-            self.oled.y+=12
+            self.oled.text(element,1,start_pos)
+            start_pos+=12
         
 
     
     def draw(self):
-        print(self.data)
+        self.oled.scroll_y = 1
         self.oled.clear()
         self.draw_row()
         self.oled.show()

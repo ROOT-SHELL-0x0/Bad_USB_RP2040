@@ -200,6 +200,9 @@ class SillyOled:
         self.height = height
         self.font = font
         self.current_scale = 1
+        self.x=1
+        self.y=1
+        self.scroll_y=1
 
         # Инициализация дисплея в зависимости от интерфейса
         if isinstance(interface,busio.I2C):
@@ -254,8 +257,8 @@ class SillyOled:
         """
         self.display.texta=text
 
-        self.display.y=y
-        self.display.x=x
+        self.y=y
+        self.x=x
         original_x = x  # Сохраняем начальную позицию x для переноса
         char_width = 8 * self.current_scale  # Ширина символа с учётом масштаба
         char_height = 8 * self.current_scale  # Высота символа с учётом масштаба
@@ -314,25 +317,32 @@ class SillyOled:
             utime.sleep_ms(delay)  # Задержка для плавности
     
     
-    def scroll_text_vertical(self,delay=50, direction="down"):
+    def scroll_text_vertical(self,delay=50, direction="down",data=None):
         
         
         
-        if self.display.y>=54:
-            self.display.y=1
+        if self.scroll_y>=54:
+            self.scroll_y=1
             self.clear()
-            self.text(self.display.texta,1,1)
             self.show()
             return
     
-        self.clear()
-        if direction=="down":
 
-            self.text(self.display.texta, 1, self.display.y + 5,align="left")
-            self.show()
+        if direction=="down":
+            
+
+            self.scroll_y += 5
+            
+
+            self.clear()
+            return
+            
         elif direction=="up":
-            self.text(self.display.texta, 1, self.display.y - 5,align="left")
-            self.show()
+            self.scroll_y -= 5
+            self.clear()
+            return
+        
+        
             
         
         
